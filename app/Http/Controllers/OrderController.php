@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
@@ -29,38 +30,28 @@ class OrderController extends Controller
             return $row->created_at;
         })
         ->editColumn('file_name', function ($row) {
-            return ($row->file_name);
+            return ($row->filename);
         })
         ->editColumn('status', function ($row) {
-            $items = '<select class="form-control select2" name="status" onchange="switchStatus('.$row->id.')" id="status" data-style="form-control">';
 
-                if($row->status == 'active') {
-                    $items .= '<option selected="true" value="active">Active</option>';
-                } else {
-                    $items .= '<option value="active">Active</option>';
-                }
+            if($row->status == 'pending') {
+                $status = '<span class="badge alert-info">Pending</span>';
+            }
 
-                if($row->status == 'inactive') {
-                    $items .= '<option selected="true" value="inactive">Inactive</option>';
-                } else {
-                    $items .= '<option value="inactive">Inactive</option>';
-                }
+            if($row->status == 'processing') {
+                $status = '<span class="badge alert-warning">Processing</span>';
+            }
 
-                if($row->status == 'invalid') {
-                    $items .= '<option selected="true" value="invalid">Invalid</option>';
-                } else {
-                    $items .= '<option value="invalid">Invalid</option>';
-                }
+            if($row->status == 'failed') {
+                $status = '<span class="badge alert-danger">Failed</span>';
+            }
 
-                if($row->status == 'rejected') {
-                    $items .= '<option selected="true" value="rejected">Rejected</option>';
-                } else {
-                    $items .= '<option value="Rejected">rejected</option>';
-                }
+            if($row->status == 'completed') {
+                $status = '<span class="badge alert-success">Completed</span>';
+            }
 
-            $items .= '</select>';
+            return $status;
 
-            return $items;
         })
         ->rawColumns(['status'])
         ->make(true);
