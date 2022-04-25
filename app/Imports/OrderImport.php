@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\Order;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class OrderImport implements ToModel
+class OrderImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -17,7 +18,7 @@ class OrderImport implements ToModel
         return new Order([
             'product_title' => $row['product_title'],
             'product_description' => $row['product_description'],
-            'style#' => $row['style#'],
+            'style#' => $row['style'],
             'sanmar_mainframe_color' => $row['sanmar_mainframe_color'],
             'size' => $row['size'],
             'color_name' => $row['color_name'],

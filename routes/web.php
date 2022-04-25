@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/', OrderController::class);
 Route::get('/order-list',[ OrderController::class, 'orderList'])->name('order-lists');
+Route::post('/import-csv',[ OrderController::class, 'importCSV'])->name('importCSV');

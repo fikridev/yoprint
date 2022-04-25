@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('product_title')->nullable();
-            $table->string('product_description')->nullable();
+            $table->text('product_description')->nullable();
             $table->string('style#')->nullable();
             $table->string('sanmar_mainframe_color')->nullable();
             $table->string('size')->nullable();

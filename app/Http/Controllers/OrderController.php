@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\OrderImport;
+use App\Models\FileUpload;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -57,6 +60,23 @@ class OrderController extends Controller
         ->make(true);
     }
 
+    public function importCSV(Request $request)
+    {
+        // $this->validate($request, [    
+        //     'name'=>'required',
+        //     'excel_file'=>'required',
+        // ]); 
+        
+        // $fileUpload = new FileUpload();
+        // $fileUpload->filename = $request->filename;
+        // $fileUpload->status = 'pending';
+        // $fileUpload->save();
+
+        Excel::import(new OrderImport, $request->file);
+
+        return "success";
+        //  return redirect()->route('sms.groups.index-temp')->with('message', 'Record are imported successfully');
+    }
     /**
      * Show the form for creating a new resource.
      *
