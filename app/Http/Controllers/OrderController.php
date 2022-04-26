@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ImportCsvStart;
 use App\Imports\OrderImport;
+use App\Jobs\ProcessImportCSV;
 use App\Models\FileUpload;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,61 +24,27 @@ class OrderController extends Controller
        return view('welcome');
     }
     
-    public function orderList()
-    {
-
-        $order = Order::all();
-      
-
-        return DataTables::of($order)
-  
-        ->editColumn('time', function ($row) {
-            return $row->created_at;
-        })
-        ->editColumn('file_name', function ($row) {
-            return ($row->filename);
-        })
-        ->editColumn('status', function ($row) {
-
-            if($row->status == 'pending') {
-                $status = '<span class="badge alert-info">Pending</span>';
-            }
-
-            if($row->status == 'processing') {
-                $status = '<span class="badge alert-warning">Processing</span>';
-            }
-
-            if($row->status == 'failed') {
-                $status = '<span class="badge alert-danger">Failed</span>';
-            }
-
-            if($row->status == 'completed') {
-                $status = '<span class="badge alert-success">Completed</span>';
-            }
-
-            return $status;
-
-        })
-        ->rawColumns(['status'])
-        ->make(true);
-    }
+   
 
     public function importCSV(Request $request)
     {
-        // $this->validate($request, [    
-        //     'name'=>'required',
-        //     'excel_file'=>'required',
-        // ]); 
-        
-        // $fileUpload = new FileUpload();
-        // $fileUpload->filename = $request->filename;
-        // $fileUpload->status = 'pending';
-        // $fileUpload->save();
+        // $chunks = array_chunk($contactTemp, 250);
 
-        Excel::import(new OrderImport, $request->file);
+        $this->validate($request, [    
+            'file'=>'required',
+        ]);
+        $file_name = $request->file('file')->getClientOriginalName();
+
+        $fileUpload = new FileUpload();
+        $fileUpload->filename = $file_name;
+        $fileUpload->status = 'pending';
+        $fileUpload->save();
+        
+        event(ImportCsvStart(['message' => 'Started']));
+
+        Excel::queueImport(new OrderImport, $request->file);
 
         return "success";
-        //  return redirect()->route('sms.groups.index-temp')->with('message', 'Record are imported successfully');
     }
     /**
      * Show the form for creating a new resource.
@@ -141,5 +110,44 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function orderList()
+    {
+
+        $order = Order::all();
+      
+
+        return DataTables::of($order)
+  
+        ->editColumn('time', function ($row) {
+            return $row->created_at;
+        })
+        ->editColumn('file_name', function ($row) {
+            return ($row->filename);
+        })
+        ->editColumn('status', function ($row) {
+
+            if($row->status == 'pending') {
+                $status = '<span class="badge alert-info">Pending</span>';
+            }
+
+            if($row->status == 'processing') {
+                $status = '<span class="badge alert-warning">Processing</span>';
+            }
+
+            if($row->status == 'failed') {
+                $status = '<span class="badge alert-danger">Failed</span>';
+            }
+
+            if($row->status == 'completed') {
+                $status = '<span class="badge alert-success">Completed</span>';
+            }
+
+            return $status;
+
+        })
+        ->rawColumns(['status'])
+        ->make(true);
     }
 }

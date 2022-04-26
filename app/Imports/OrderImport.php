@@ -3,10 +3,12 @@
 namespace App\Imports;
 
 use App\Models\Order;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class OrderImport implements ToModel, WithHeadingRow
+class OrderImport implements ToModel, WithHeadingRow,WithChunkReading,ShouldQueue
 {
     /**
     * @param array $row
@@ -15,6 +17,7 @@ class OrderImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
+
         return new Order([
             'product_title' => $row['product_title'],
             'product_description' => $row['product_description'],
@@ -24,5 +27,10 @@ class OrderImport implements ToModel, WithHeadingRow
             'color_name' => $row['color_name'],
             'piece_price' => $row['piece_price'],
         ]);
+    }
+
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
