@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ImportCsvQueue
+class ImportCsvEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,7 +21,7 @@ class ImportCsvQueue
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
@@ -32,5 +32,12 @@ class ImportCsvQueue
     public function broadcastOn()
     {
         return new PrivateChannel('channel-name');
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'title' => 'This notification from www.codecheef.org'
+        ];
     }
 }

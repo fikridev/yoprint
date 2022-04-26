@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ImportCsvStart;
+use App\Events\ImportCsvEvent;
 use App\Imports\OrderImport;
 use App\Jobs\ProcessImportCSV;
 use App\Models\FileUpload;
@@ -29,7 +29,7 @@ class OrderController extends Controller
     public function importCSV(Request $request)
     {
         // $chunks = array_chunk($contactTemp, 250);
-
+        // event(new ImportCsvEvent());
         $this->validate($request, [    
             'file'=>'required',
         ]);
@@ -40,11 +40,9 @@ class OrderController extends Controller
         $fileUpload->status = 'pending';
         $fileUpload->save();
         
-        event(ImportCsvStart(['message' => 'Started']));
 
         Excel::queueImport(new OrderImport, $request->file);
-
-        return "success";
+        return back();
     }
     /**
      * Show the form for creating a new resource.
@@ -115,7 +113,7 @@ class OrderController extends Controller
     public function orderList()
     {
 
-        $order = Order::all();
+        $order = FileUpload::all();
       
 
         return DataTables::of($order)

@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Events\ImportCsvQueue;
 use App\Models\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -27,6 +28,7 @@ class OrderImport implements ToModel, WithHeadingRow,WithChunkReading,ShouldQueu
             'color_name' => $row['color_name'],
             'piece_price' => $row['piece_price'],
         ]);
+
     }
 
     public function chunkSize(): int

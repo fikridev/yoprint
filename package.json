@@ -18,6 +18,7 @@
         "pusher-js": "^7.0.6"
     },
     "dependencies": {
-        "dropify": "^0.2.2"
+        "dropify": "^0.2.2",
+        "redis-server": "^1.2.2"
     }
 }
