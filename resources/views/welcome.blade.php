@@ -4,7 +4,8 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}" />
+
         <link rel="shortcut icon" href="#">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -78,7 +79,7 @@
         </style>
     </head>
     <body>
-      <div class="container mt-3">
+      {{-- <div class="container mt-3"> --}}
         {{-- <div class="drag-area">
           <div class="icon">
             <i class="fa fa-cloud-upload"></i>
@@ -88,14 +89,20 @@
           <button>Browse file</button>
         </div> --}}
 
-        <div class="mb-3">
+        {{-- <div class="mb-3">
           <form action="{{route('importCSV')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <input name="file" type="file" id="uploaded-file" class="dropify" data-height="300"/>
             <button type="submit" class="btn btn-success mt-3">Upload File</button>
         </form>
-        </div>
-        <div class="card-deck mb-3 text-center">
+        </div> --}}
+        <div id="app">
+       </div>
+        {{-- <div class="panel-body">
+          <jobs :jobs='@json($jobs)'></jobs>
+        </div> --}}
+
+        {{-- <div class="card-deck mb-3 text-center">
           <table class="table text-nowrap text-md-nowrap table-bordered mg-b-0" id="order-list-table">
             <thead>
               <tr>
@@ -105,8 +112,8 @@
               </tr>
             </thead>
           </table>
-        </div>
-      </div>
+        </div> --}}
+      {{-- </div> --}}
 
 
       <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
@@ -118,7 +125,10 @@
               $('.dropify').dropify();
               // console.log("asjkdhkasjhd: "+window.Echo)
       </script>
+<script>
 
+
+</script>
 
 <script>
     // const dropArea = document.querySelector(".drag-area");

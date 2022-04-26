@@ -21,10 +21,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-       return view('welcome');
+       return view('welcome',['jobs' => $this->jobs()]);
     }
     
-   
+    public function jobs()
+        {
+            return FileUpload::orderBy('created_at', 'DESC')->get()->toArray();
+        }
 
     public function importCSV(Request $request)
     {
@@ -40,8 +43,9 @@ class OrderController extends Controller
         $fileUpload->status = 'pending';
         $fileUpload->save();
         
-
-        Excel::queueImport(new OrderImport, $request->file);
+        $file_id = $fileUpload->id;
+        event(new ImportCsvEvent($file_id));
+        Excel::queueImport(new OrderImport(), $request->file);
         return back();
     }
     /**

@@ -10,19 +10,18 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ImportCsvEvent implements ShouldBroadcast
+class ImportCsvCompleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $file_id;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($file_id)
+    public function __construct()
     {
-        $this->file_id = $file_id;
+        //
     }
 
     /**
@@ -32,7 +31,11 @@ class ImportCsvEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('update-import-status');
+        return new Channel('update-import-status-completed');
     }
 
+    public function broadcastAs()
+    {
+        return 'completed';
+    }
 }
