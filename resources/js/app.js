@@ -2,10 +2,8 @@ const { default: Echo } = require('laravel-echo');
 
 require('./bootstrap');
 
-const channel = window.Echo.channel('public.playground.1');
+const channel = window.Echo.channel('update-import-status');
 
-channel.subscribed( () => {
-
-    console.log('subscribed');
-
-})
+channel.listen('UpdateStatusProcessing',(e)=>{
+    alert('This showed Up!');
+});
